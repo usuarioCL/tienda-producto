@@ -18,6 +18,9 @@ router.get('/', async (req, res) => {
     res.status(500).send('Error del servidor');
   }
 });
+  
+
+
 
 // ... Resto de las rutas
 module.exports = router;
