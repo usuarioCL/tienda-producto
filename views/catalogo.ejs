@@ -1,0 +1,23 @@
+<h2 class="text-center mt-5 mb-5">Catálogo de Productos</h2>
+
+<div class="row">
+  <% if (productos && productos.length > 0) { %>
+    <% productos.forEach(producto => { %>
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-light">
+          <div class="card-body">
+            <h5 class="card-title text-center text-primary"><%= producto.nombre %></h5> <!-- Color y centrado -->
+            <p class="card-text"><%= producto.descripcion %></p>
+            <p class="card-text text-muted">Precio: <%= producto.precio %> USD</p>
+            <p class="card-text text-muted">Stock: <%= producto.stock %></p>
+            <a href="/edit/<%= producto.idproducto %>" class="btn btn-warning btn-sm">Editar</a>
+            <a href="/delete/<%= producto.idproducto %>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar este producto?');">Eliminar</a>
+          </div>
+        </div>
+      </div>
+    <% }); %>
+  <% } else { %>
+    <p>No hay productos disponibles en el catálogo.</p>
+  <% } %>
+</div>
+

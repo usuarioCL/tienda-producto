@@ -1,52 +1,44 @@
-CREATE DATABASE tienda_productos;
-USE tienda_productos;
+CREATE DATABASE tiendaed;
+USE tiendaed;
 
-CREATE TABLE categorias (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL
+CREATE TABLE IF NOT EXISTS categorias
+(
+	idcategoria 			INT AUTO_INCREMENT PRIMARY KEY,
+    categoria				VARCHAR (50)	NOT NULL,
+    CONSTRAINT uk_categoria_ca	UNIQUE (categoria)
 )ENGINE = INNODB;
 
-CREATE TABLE productos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(150) NOT NULL,
-    descripcion TEXT,
-    precio DECIMAL(10,2) NOT NULL,
-    stock INT DEFAULT 0,
-    id_categoria INT,
-    fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (id_categoria) REFERENCES categorias(id)
+CREATE TABLE IF NOT EXISTS productos
+(
+	idproducto				INT AUTO_INCREMENT PRIMARY KEY,
+    idcategoria				INT 		NOT NULL,
+    nombre					VARCHAR(50) NOT NULL,
+    descripcion				TEXT,
+    precio					DECIMAL(10,2),
+    stock					INT DEFAULT 0,
+    CONSTRAINT fk_categoria FOREIGN KEY (idcategoria) REFERENCES categorias(idcategoria)
+		ON DELETE CASCADE ON UPDATE CASCADE
+    
 )ENGINE = INNODB;
 
-INSERT INTO categorias (nombre) VALUES 
-('Electrónica'),
-('Ropa'),
-('Hogar'),
-('Juguetes'),
-('Libros');
+INSERT INTO categorias (categoria) VALUES 
+('Tecnología'), 
+('Ropa'),       
+('Juguetes');    
 
-INSERT INTO productos (nombre, descripcion, precio, stock, id_categoria) VALUES 
-('Smartphone Samsung', 'Teléfono inteligente modelo Galaxy A54', 899.99, 15, 1),
-('Laptop HP', 'Laptop de 15 pulgadas, 8GB RAM', 2399.00, 8, 1),
-('Camiseta Nike', 'Camiseta deportiva color azul', 129.99, 30, 2);
+INSERT INTO categorias (categoria)
+VALUES ('Electrónica');
 
-SELECT * FROM productos WHERE nombre LIKE 'Laptop';
+INSERT INTO productos (idcategoria, nombre, descripcion, precio, stock) VALUES
+(1, 'Laptop Lenovo', 'Laptop con 16GB RAM y 512GB SSD', 2500.00, 10),
+(1, 'Smartphone Samsung', 'Celular de 128GB y cámara triple', 1200.00, 15),
+(1, 'Auriculares inalámbricos', 'Bluetooth con cancelación de ruido', 220.00, 20),
+(1, 'Mouse gamer', 'Mouse con luces RGB y alta precisión', 85.00, 30),
 
-SELECT * FROM productos ORDER BY precio ASC;
+(2, 'Camisa Blanca', 'Camisa de algodón para hombre', 75.50, 25),
+(2, 'Pantalón Jeans', 'Pantalón denim azul clásico', 95.00, 18),
+(2, 'Zapatillas deportivas', 'Zapatillas cómodas para correr', 130.00, 22),
 
-SELECT p.*, c.nombre AS categoria
-FROM productos p
-INNER JOIN categorias c ON p.id_categoria = c.id
-ORDER BY c.nombre ASC;
-
-SELECT 
-    p.id, 
-    p.nombre AS nombre_producto, 
-    p.precio, 
-    c.nombre AS categoria
-FROM 
-    productos p
-INNER JOIN 
-    categorias c ON p.id_categoria = c.id
-ORDER BY 
-    p.precio ASC;
-
+(3, 'Muñeca Elsa', 'Muñeca de Frozen con vestido azul', 65.00, 20),
+(3, 'Carro a control remoto', 'Auto eléctrico con batería recargable', 110.00, 10),
+(3, 'Lego Star Wars', 'Set de construcción temático', 180.00, 12);

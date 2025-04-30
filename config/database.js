@@ -1,11 +1,23 @@
-// config/database.js
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise')
 
+//Crear pool de acceso
 const pool = mysql.createPool({
   host: 'localhost',
-  user: 'root',   // Cambia si usas otro usuario
-  password: '',   // Cambia si tienes una contraseña
-  database: 'tienda_productos' // Asegúrate de que el nombre de la base de datos sea correcto
-});
+  user: 'root',
+  password: '',
+  database: 'tiendaed'
+})
+  
+//Verificar la conexión
+async function testConnection(){
+  try{
+    const connection = await pool.getConnection()
+    console.log("Conexión MySQL exitosa")
+    connection.release() //liberar
+  }catch(error){
+    console.error("Error: ", error)
+  }
+}
 
-module.exports = pool.promise();
+testConnection();
+module.exports = pool;

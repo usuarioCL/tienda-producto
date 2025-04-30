@@ -1,26 +1,29 @@
-const express = require('express');
-const path = require('path');
+const express = require('express')
+const bodyParser = require('body-parser')
+const path = require('path')
+
+//Acceso a rutas
+const rutaProducto = require('./routes/producto')
+//const rutaMarca = require('./routes/marca')
+
+//Iniciar la App
 const app = express();
-const productosRoutes = require('./routes/producto');
+const PORT = process.env.PORT || 3000
 
-// Configurar EJS como motor de plantillas
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));
+//Configurar "middleware" => "capa de comunicación"
+app.use(bodyParser.urlencoded({extended: true}))
+app.use(bodyParser.json())
+app.use(express.static(path.join(__dirname, 'public')))
 
-// Middleware para leer JSON
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));  // Para poder leer formularios con datos
+//Motor de plantillas
+app.set('view engine', 'ejs')
+app.set('views', path.join(__dirname, 'views'))
 
-// Ruta para la raíz (/)
-app.get('/', (req, res) => {
-  res.redirect('/producto');  // Redirige a la lista de productos
-});
+//Configuración rutas
+app.use('/', rutaProducto)          //Principal
+//app.use('/api/marcas', rutaMarca)   //Suministrar datos
 
-// Rutas
-app.use('/producto', productosRoutes);
-
-// Servidor
-const PORT = 3000;
+//Servidor Web
 app.listen(PORT, () => {
-  console.log(`Servidor corriendo en http://localhost:${PORT}`);
+  console.log(`Servidor iniciado en http://localhost:3000`)
 });
