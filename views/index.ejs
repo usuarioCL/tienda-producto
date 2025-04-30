@@ -9,6 +9,7 @@
         <th>Categoria</th>
         <th>Nombre</th>
         <th>Descripción</th>
+        <th>Imagen</th>
         <th>Precio</th>
         <th>Stock</th>
         <th>Operaciones</th>
@@ -21,6 +22,13 @@
         <td><%= producto.categoria %></td>
         <td><%= producto.nombre %></td>
         <td><%= producto.descripcion %></td>
+        <td>
+          <% if (producto.imgurl) { %>
+            <a href="<%= producto.imgurl %>" target="_blank">Ver imagen</a>
+          <% } else { %>
+            Sin imagen
+          <% } %>
+        </td>
         <td><%= producto.precio %></td>
         <td><%= producto.stock %></td>
         

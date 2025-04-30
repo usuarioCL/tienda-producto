@@ -1,10 +1,9 @@
-<%- include('partials/header') %>
-<h2 class="text-center mt-5 mb-4">Catálogo de Productos</h2>
+<h2 class="text-center mt-5 mb-5">Añadidos recientemente</h2>
 
 <div class="container">
   <div class="row row-cols-1 row-cols-md-3 g-4">
-    <% if (productos && productos.length > 0) { %>
-      <% productos.forEach(producto => { %>
+    <% if (productosRecientes && productosRecientes.length  > 0) { %>
+      <% productosRecientes.forEach(producto => { %>
         <div class="col">
           <div class="card h-100 shadow-sm border-0">
             <img src="<%= producto.imgurl %>" class="card-img-top img-fluid rounded-top" alt="Imagen de <%= producto.nombre %>">
@@ -40,4 +39,3 @@
     <% } %>
   </div>
 </div>
-<%- include('partials/footer') %>

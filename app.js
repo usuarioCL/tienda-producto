@@ -27,3 +27,6 @@ app.use('/', rutaProducto)          //Principal
 app.listen(PORT, () => {
   console.log(`Servidor iniciado en http://localhost:3000`)
 });
+
+//servir archivos estáticos (como imágenes)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));

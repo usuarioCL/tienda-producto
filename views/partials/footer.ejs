@@ -1,6 +1,6 @@
 </main>
 
-<footer>
+<footer class="bg-light text-dark">
   <!-- Pie de página -->
 </footer>
 
@@ -9,6 +9,25 @@
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  const toggleButton = document.getElementById('toggle-darkmode');
+  const body = document.body;
+
+  // Cargar preferencia si existe
+  const savedTheme = localStorage.getItem('bs-theme');
+  if (savedTheme) {
+    body.setAttribute('data-bs-theme', savedTheme);
+    toggleButton.textContent = savedTheme === 'dark' ? '☀️ Modo claro' : '🌙 Modo nocturno';
+  }
+
+  toggleButton.addEventListener('click', () => {
+    const currentTheme = body.getAttribute('data-bs-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    body.setAttribute('data-bs-theme', newTheme);
+    localStorage.setItem('bs-theme', newTheme);
+    toggleButton.textContent = newTheme === 'dark' ? '☀️ Modo claro' : '🌙 Modo nocturno';
+  });
+</script>
 
 </body>
 </html>

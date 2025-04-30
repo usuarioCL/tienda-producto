@@ -1,6 +1,6 @@
 <%- include('partials/header') %>
 
-<form action="/edit/<%= producto.idproducto %>" id="formulario-editar" autocomplete="off" method="post">
+<form action="/edit/<%= producto.idproducto %>" id="formulario-editar" autocomplete="off" method="post" enctype="multipart/form-data">
   <div class="card mt-2">
     <div class="card-header"><strong>Editar Producto</strong></div>
 
@@ -29,10 +29,10 @@
       <div class="row g-2">
         <div class="col-md-6 mb-2">
           <div class="form-floating">
-            <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Descripción" required><%= producto.descripcion %></textarea>
+            <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Descripción" style="height: 120px;" required><%= producto.descripcion %></textarea>
             <label for="descripcion">Descripción</label>
           </div>
-        </div>
+        </div>        
 
         <div class="col-md-3 mb-2">
           <div class="form-floating">
@@ -47,6 +47,26 @@
             <label for="stock">Stock</label>
           </div>
         </div>
+      </div>
+
+
+      <!-- Mostrar la imagen actual si existe -->
+      <div class="form-group">
+        <label for="imagen">Imagen del Producto</label>
+        <% if (producto.imgurl) { %>
+          <div>
+            <img src="<%= producto.imgurl %>" alt="Imagen actual" class="img-thumbnail" style="max-width: 200px;">
+          </div>
+          <div>
+            <p>Si deseas cambiar la imagen, selecciona una nueva:</p>
+            <input type="file" class="form-control-file" id="imagen" name="imagen">
+          </div>
+        <% } else { %>
+          <div>
+            <p>No hay imagen actual, puedes cargar una nueva imagen:</p>
+            <input type="file" class="form-control-file" id="imagen" name="imagen">
+          </div>
+        <% } %>
       </div>
 
     </div>

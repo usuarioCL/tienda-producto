@@ -1,17 +1,18 @@
 <%- include('partials/header') %>
 
-<form action="/create" id="formulario-registro" autocomplete="off" method="post">
-  <div class="card mt-2">
+<form action="/create" id="formulario-registro" autocomplete="off" method="post" enctype="multipart/form-data">
+  <div class="card mt-4">
     <div class="card-header"><strong>Registro de Producto</strong></div>
 
     <div class="card-body">
       
-      <div class="row g-2">
-        <div class="col-md-6 mb-2">
+      <div class="row g-3">
+
+        <!-- Selección de Categoría -->
+        <div class="col-md-6">
           <div class="form-floating">
             <select name="categorias" id="categorias" class="form-select" required>
               <option value="" selected disabled>Seleccione</option>
-              <!-- Las categorías se cargan desde la BD -->
               <% categorias.forEach(element => { %>
                 <option value="<%= element.idcategoria %>"><%= element.categoria %></option>
               <% }) %>
@@ -20,7 +21,8 @@
           </div>
         </div>
 
-        <div class="col-md-6 mb-2">
+        <!-- Nombre del Producto -->
+        <div class="col-md-6">
           <div class="form-floating">
             <input type="text" id="nombre" name="nombre" class="form-control" placeholder="Nombre" required>
             <label for="nombre">Nombre</label>
@@ -28,39 +30,50 @@
         </div>
       </div>
 
-      <div class="row g-2">
-        <div class="col-md-6 mb-2">
-          <div class="form-floating">
-            <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Descripción" required></textarea>
-            <label for="descripcion">Descripción</label>
+      <div class="row g-3">
+        <!-- Descripción del Producto -->
+        <div class="col-md-12">
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <textarea id="descripcion" name="descripcion" class="form-control" placeholder="Escribe una descripción del producto..." rows="4" required></textarea>
           </div>
         </div>
+      </div>
 
-        <div class="col-md-3 mb-2">
+      <div class="row g-3">
+        <!-- Precio -->
+        <div class="col-md-6">
           <div class="form-floating">
             <input type="number" id="precio" name="precio" class="form-control" placeholder="Precio" required step="0.01">
             <label for="precio">Precio</label>
           </div>
         </div>
 
-        <div class="col-md-3 mb-2">
+        <!-- Stock -->
+        <div class="col-md-6">
           <div class="form-floating">
             <input type="number" id="stock" name="stock" class="form-control" placeholder="Stock" required min="1">
             <label for="stock">Stock</label>
           </div>
         </div>
       </div>
+
+      <!-- Imagen del Producto -->
+      <div class="mb-3">
+        <label for="imagen" class="form-label">Subir Imagen</label>
+        <input type="file" class="form-control" id="imagen" name="imagen" accept="image/png, image/jpeg" required>
+      </div>
+
     </div>
 
-    <div class="card-footer">
+    <div class="card-footer text-end">
       <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
       <a href="/" class="btn btn-sm btn-secondary">Cancelar</a>
     </div>
   </div>
 </form>
 
-<!-- Incluir el catálogo de productos aquí -->
-<%- include('catalogo') %> <!-- Esto incluirá el archivo catalogo.ejs -->
+<%- include('catalogores') %>
 
 <script>
   document.addEventListener("DOMContentLoaded", () => {
