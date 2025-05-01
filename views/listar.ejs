@@ -1,0 +1,54 @@
+<%- include('partials/header') %>
+
+<!-- Mostrar la lista de Productos en la tabla -->
+<div class="table-responsive mt-5">
+  <table class="table table-hover shadow-sm rounded">
+    <thead class="bg-primary text-white">
+      <tr>
+        <th>ID</th>
+        <th>Categoría</th>
+        <th>Nombre</th>
+        <th>Descripción</th>
+        <th>Imagen</th>
+        <th>Precio (S/)</th>
+        <th>Stock</th>
+        <th>Operaciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% productos.forEach(producto => { %>
+        <tr class="align-middle">
+          <td><%= producto.idproducto %></td>
+          <td><%= producto.categoria %></td>
+          <td><strong><%= producto.nombre %></strong></td>
+          <td class="text-truncate" style="max-width: 200px;"><%= producto.descripcion %></td>
+    
+          <td>
+            <% if (producto.imgurl) { %>
+              <a href="<%= producto.imgurl %>" target="_blank" class="btn btn-sm btn-outline-info">
+                📷 Ver imagen
+              </a>
+            <% } else { %>
+              <span class="badge bg-secondary">Sin imagen</span>
+            <% } %>
+          </td>
+    
+          <td><span class="fw-semibold text-success">S/ <%= producto.precio.toFixed(2) %></span></td>
+          <td><span><%= producto.stock %></span></td>
+    
+          <td class="d-flex gap-2">
+            <a href="/edit/<%= producto.idproducto %>?origen=listar" class="btn btn-sm btn-primary">Editar</a>
+            <a href="/delete/<%= producto.idproducto %>" class="btn btn-sm btn-danger delete" >
+              Eliminar
+            </a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+    
+  </table>
+</div>
+
+
+
+<%- include('partials/footer') %>

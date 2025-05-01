@@ -5,14 +5,14 @@ const multer = require('multer');
 const path = require('path');
 
 // Ruta para acceder a la vista de creación de productos
-router.get('/', async (req, res) => {
+router.get('/create', async (req, res) => {
   try {
     // Obtener los productos más recientes (por ejemplo, los últimos 5 productos)
     const [productosRecientes] = await db.query(`
       SELECT * 
       FROM productos 
       ORDER BY fecha_creacion DESC 
-      LIMIT 6
+      LIMIT 4
     `);
 
     // Obtener categorías de la base de datos
@@ -27,7 +27,7 @@ router.get('/', async (req, res) => {
 });
 
 //Muestra los datos
-router.get('/index', async (req, res) => {
+router.get('/listar', async (req, res) => {
   try{
     const query = `
     SELECT 
@@ -43,45 +43,94 @@ router.get('/index', async (req, res) => {
     ORDER BY p.idproducto ASC;
     `
     const [productos] = await db.query(query)
-    res.render('index', {productos})
+     // Convertir el precio a número
+     const PrecioNum = productos.map(producto => ({
+      ...producto,
+      precio: Number(producto.precio) // Asegurarse de que el precio sea un número
+    }));
+
+    res.render('listar', {productos: PrecioNum})
   }catch(error){
     console.error(error)
   }
 });
 
-//ruta para acceder a catalogos
-router.get('/catalogo',async (req,res)=>{
+router.get('/catalogo', async (req, res) => {
   try {
-    // Obtener productos y categorías de la base de datos
-    const [productos] = await db.query("SELECT * FROM productos");
+    const { nombre, categoria, precio_min, precio_max } = req.query;
+
+    let sql = `
+      SELECT productos.*, categorias.categoria AS categoria
+      FROM productos
+      JOIN categorias ON productos.idcategoria = categorias.idcategoria
+      WHERE 1=1
+    `;
+    const params = [];
+
+    if (nombre) {
+      sql += ' AND productos.nombre LIKE ?';
+      params.push(`%${nombre}%`);
+    }
+
+    if (categoria) {
+      sql += ' AND productos.idcategoria = ?';
+      params.push(categoria);
+    }
+
+    if (precio_min) {
+      sql += ' AND productos.precio >= ?';
+      params.push(precio_min);
+    }
+
+    if (precio_max) {
+      sql += ' AND productos.precio <= ?';
+      params.push(precio_max);
+    }
+
+    const [productos] = await db.query(sql, params);
     const [categorias] = await db.query("SELECT * FROM categorias");
 
-    // Pasar ambos productos y categorías a la vista
-    res.render('catalogo', { productos, categorias });
+    res.render('catalogo', { productos, categorias, nombre, categoria, precio_min, precio_max });
+
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al obtener los productos y categorías");
   }
-})
-
-
+});
 
 //Esta ruta renderiza el formulario de edición, para ello se debe identificar el producto
-router.get('/edit/:id', async(req, res) => {
-  try{
-    const [datos] = await db.query("SELECT * FROM categorias")
-    const [registro] = await db.query("SELECT * FROM productos WHERE idproducto = ?", [req.params.id])
+router.get('/edit/:id', async (req, res) => {
+  const { id } = req.params;
+  const origen = req.query.origen || 'listar';
 
-    if (registro.length > 0)
-      res.render('edit', { categorias: datos, producto: registro[0] })
-    else
-      res.redirect('/')
+  try {
+    const [producto] = await db.query('SELECT * FROM productos WHERE idproducto = ?', [id]);
+    const [categorias] = await db.query('SELECT * FROM categorias');
+
+    res.render('edit', {
+      producto: producto[0],
+      categorias,
+      origen
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error al obtener producto');
   }
-  catch(error){
-    console.error(error)
+});
+
+
+//Eliminación
+router.get('/delete/:id', async(req, res) => {
+  try{
+    //Datos que ingresan por el <form></form> req.body.objeto
+    //Datos que ingresan por GET/URL req.params.atributo
+    const [resultado] = await db.query("DELETE FROM productos WHERE idproducto = ?", [req.params.id])
+    //res.send(resultado)
+    res.redirect('/listar')
+  }catch(error){
+    console.error(error);
   }
 })
-
 
 // Configurar almacenamiento
 const storage = multer.diskStorage({
@@ -124,7 +173,7 @@ router.post('/create', upload.single('imagen'), async (req, res) => {
       [categorias, nombre, descripcion, precio, stock, imgurl]
     );
 
-    res.redirect('/');
+    res.redirect('create');
   } catch (error) {
     console.error(error);
     res.status(500).send("Error al crear el producto");
@@ -133,18 +182,14 @@ router.post('/create', upload.single('imagen'), async (req, res) => {
 
 // Proceso de actualización de producto, incluyendo la imagen
 router.post('/edit/:id', upload.single('imagen'), async (req, res) => {
-  const { categorias, nombre, descripcion, precio, stock } = req.body;
-  
-  // Si hay una nueva imagen, se actualiza la URL de la imagen
-  let imgurl = req.body.imgurl;  // La URL actual de la imagen
+  const { categorias, nombre, descripcion, precio, stock, origen } = req.body;
+  let imgurl = req.body.imgurl;
 
   if (req.file) {
-    // Si se ha subido una nueva imagen, se actualiza la URL
     imgurl = `/uploads/${req.file.filename}`;
   }
-  
+
   try {
-    // Actualizar el producto en la base de datos
     await db.query(`
       UPDATE productos 
       SET idcategoria = ?, nombre = ?, descripcion = ?, precio = ?, stock = ?, imgurl = ? 
@@ -152,25 +197,12 @@ router.post('/edit/:id', upload.single('imagen'), async (req, res) => {
       [categorias, nombre, descripcion, precio, stock, imgurl, req.params.id]
     );
 
-    res.redirect('/');
+    // Redirige de vuelta al origen (index o create)
+    res.redirect(`/${origen}`);
   } catch (error) {
     console.error(error);
-    res.status(500).send("Error al actualizar el producto");
+    res.status(500).send('Error al actualizar el producto');
   }
 });
-
-//Eliminación
-router.get('/delete/:id', async(req, res) => {
-  try{
-    //Datos que ingresan por el <form></form> req.body.objeto
-    //Datos que ingresan por GET/URL req.params.atributo
-    const [resultado] = await db.query("DELETE FROM productos WHERE idproducto = ?", [req.params.id])
-    //res.send(resultado)
-    res.redirect('/')
-  }catch(error){
-    console.error(error);
-  }
-})
-
 
 module.exports = router;

@@ -1,33 +1,53 @@
 </main>
 
-<footer class="bg-light text-dark">
-  <!-- Pie de página -->
-</footer>
+<footer class="bg-body-tertiary text-body border-top mt-5 py-4 mt-auto">
+  <div class="container">
+    <div class="row">
 
+      <!-- Sobre nosotros -->
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">Sobre nosotros</h5>
+        <p class="small text-muted">
+          Somos una tienda dedicada a ofrecer los mejores productos con garantía, calidad y buen servicio. ¡Gracias por confiar en nosotros!
+        </p>
+      </div>
+
+      <!-- Enlaces útiles -->
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">Enlaces útiles</h5>
+        <ul class="list-unstyled">
+          <li><a href="/" class="nav-link">Inicio</a></li>
+          <li><a href="/catalogo" class="nav-link">Catálogo</a></li>
+          <li><a href="/contacto" class="nav-link">Contáctanos</a></li>
+          <li><a href="/acerca" class="nav-link">Acerca de</a></li>
+        </ul>
+      </div>
+
+      <!-- Contacto -->
+      <div class="col-md-4 mb-3">
+        <h5 class="fw-bold">Contáctanos</h5>
+        <ul class="list-unstyled small text-muted">
+          <li><i class="bi bi-geo-alt-fill me-2"></i> Ica, Perú</li>
+          <li><i class="bi bi-telephone-fill me-2"></i> +51 999 888 777</li>
+          <li><i class="bi bi-envelope-fill me-2"></i> info@edtienda.com</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <hr>
+    <div class="d-flex justify-content-between small text-muted pb-2">
+      <span>&copy; <%= new Date().getFullYear() %> ED. Todos los derechos reservados.</span>
+      <span>Desarrollado por ED</span>
+    </div>
+  </div>
+</footer>
 <!-- Bootstrap 5 -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.5/dist/js/bootstrap.bundle.min.js" integrity="sha384-k6d4wzSIapyDyv1kpU366/PK5hCdSbCRGRCMv+eplOQJWyd1fbcAu9OCUj5zNLiq" crossorigin="anonymous"></script>
 
 <!-- SweetAlert2 -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script>
-  const toggleButton = document.getElementById('toggle-darkmode');
-  const body = document.body;
-
-  // Cargar preferencia si existe
-  const savedTheme = localStorage.getItem('bs-theme');
-  if (savedTheme) {
-    body.setAttribute('data-bs-theme', savedTheme);
-    toggleButton.textContent = savedTheme === 'dark' ? '☀️ Modo claro' : '🌙 Modo nocturno';
-  }
-
-  toggleButton.addEventListener('click', () => {
-    const currentTheme = body.getAttribute('data-bs-theme');
-    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-    body.setAttribute('data-bs-theme', newTheme);
-    localStorage.setItem('bs-theme', newTheme);
-    toggleButton.textContent = newTheme === 'dark' ? '☀️ Modo claro' : '🌙 Modo nocturno';
-  });
-</script>
-
+<!-- Enlaza el archivo JS -->
+<script src="/js/funciones.js"></script>
 </body>
 </html>

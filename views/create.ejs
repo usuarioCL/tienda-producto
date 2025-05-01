@@ -5,9 +5,7 @@
     <div class="card-header"><strong>Registro de Producto</strong></div>
 
     <div class="card-body">
-      
       <div class="row g-3">
-
         <!-- Selección de Categoría -->
         <div class="col-md-6">
           <div class="form-floating">
@@ -60,8 +58,11 @@
 
       <!-- Imagen del Producto -->
       <div class="mb-3">
-        <label for="imagen" class="form-label">Subir Imagen</label>
+        <label for="imagen" class="form-label" >Subir Imagen</label>
         <input type="file" class="form-control" id="imagen" name="imagen" accept="image/png, image/jpeg" required>
+        <div class="form-text">
+          Tamaño recomendado: 300px × 300px o similar (JPG o PNG). Se ajusta automáticamente sin recortes.
+        </div>
       </div>
 
     </div>
@@ -74,32 +75,5 @@
 </form>
 
 <%- include('catalogores') %>
-
-<script>
-  document.addEventListener("DOMContentLoaded", () => {
-    const formulario = document.querySelector("#formulario-registro")
-
-    formulario.addEventListener("submit", (event) => {
-      event.preventDefault()
-
-      Swal.fire({
-        title: 'Producto',
-        text: '¿Está seguro de registrar el producto?',
-        icon: 'question',
-        footer: 'SENATI - Ingeniería de Software',
-        confirmButtonText: 'Aceptar',
-        confirmButtonColor: '#2980b9',
-        showCancelButton: true,
-        cancelButtonText: 'Cancelar',
-        cancelButtonColor: '#c0392b'
-      }).then((result) => {
-        if (result.isConfirmed){
-          formulario.submit()
-        }
-      })
-
-    })
-  })
-</script>
 
 <%- include('partials/footer') %>
