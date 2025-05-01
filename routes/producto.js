@@ -4,6 +4,29 @@ const db = require('../config/database') //Acceso BD
 const multer = require('multer');
 const path = require('path');
 
+
+// Ruta para acceder a la vista de creación de productos
+router.get('/', async (req, res) => {
+  try {
+    // Obtener los productos más recientes (por ejemplo, los últimos 5 productos)
+    const [productosRecientes] = await db.query(`
+      SELECT * 
+      FROM productos 
+      ORDER BY fecha_creacion DESC 
+      LIMIT 4
+    `);
+
+    // Obtener categorías de la base de datos
+    const [categorias] = await db.query("SELECT * FROM categorias");
+
+    // Pasar productos recientes y categorías a la vista
+    res.render('create', { productosRecientes, categorias });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Error al obtener los productos y categorías");
+  }
+});
+
 // Ruta para acceder a la vista de creación de productos
 router.get('/create', async (req, res) => {
   try {
