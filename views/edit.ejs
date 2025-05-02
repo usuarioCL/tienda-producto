@@ -68,6 +68,9 @@
             <label class="form-label">Imagen actual:</label>
             <img src="<%= producto.imgurl %>" alt="Imagen actual" class="img-fluid border rounded" style="height: 200px; width: 100%; object-fit: contain;">
           </div>
+          
+          <input type="hidden" name="imgurl" value="<%= producto.imgurl %>">
+          
         <% } %>
       </div>
 

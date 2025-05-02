@@ -143,17 +143,20 @@ router.get('/edit/:id', async (req, res) => {
 
 
 //Eliminación
-router.get('/delete/:id', async(req, res) => {
-  try{
-    //Datos que ingresan por el <form></form> req.body.objeto
-    //Datos que ingresan por GET/URL req.params.atributo
-    const [resultado] = await db.query("DELETE FROM productos WHERE idproducto = ?", [req.params.id])
-    //res.send(resultado)
-    res.redirect('/listar')
-  }catch(error){
+router.get('/delete/:id', async (req, res) => {
+  const { id } = req.params;
+  const origen = req.query.origen || 'index';  // Por defecto 'index'
+
+  try {
+    await db.query('DELETE FROM productos WHERE idproducto = ?', [id]);
+
+    // Redirige de vuelta al origen (index o create)
+    res.redirect(`/${origen}`);
+  } catch (error) {
     console.error(error);
+    res.status(500).send('Error al eliminar el producto');
   }
-})
+});
 
 // Configurar almacenamiento
 const storage = multer.diskStorage({

@@ -6,8 +6,21 @@ body {
 .img-card-fija {
   width: 100%;
   height: 300px; 
-  object-fit: contain;
-  border-top-left-radius: 0.5rem; /* opcional, redondeo arriba */
+  object-fit: cover;
+  border-top-left-radius: 0.5rem; 
   border-top-right-radius: 0.5rem;
 }
 
+.clamp-1 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Limita a 2 líneas con puntos suspensivos */
+.clamp-2 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limita a 2 líneas */
+  -webkit-box-orient: vertical;
+}

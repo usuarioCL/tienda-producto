@@ -22,5 +22,6 @@ SET nombre = 'Tablet Samsung',
     idcategoria = 1
 WHERE idproducto = 1;
 
+describe productos;
 
 -- DELETE FROM productos WHERE idproducto = 1;

@@ -1,42 +1,56 @@
 <h2 class="text-center my-4">Añadidos recientemente</h2>
 
-<div class="container">
+<div class="container mb-3">
   <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+
     <% if (productosRecientes && productosRecientes.length > 0) { %>
       <% productosRecientes.forEach(producto => { %>
         <div class="col">
-          <div class="card h-100 shadow-sm border-0">
+          <div class="card h-100 shadow-sm">
+            
             <!-- Imagen del producto -->
-            <img src="<%= producto.imgurl %>" 
-              class="card-img-top img-card-fija" 
-              alt="Imagen de <%= producto.nombre %>">
-
+            <img src="<%= producto.imgurl %>" class="card-img-top img-card-fija" alt="Imagen del producto: <%= producto.nombre %>">
+            
             <div class="card-body d-flex flex-column">
-              <!-- Nombre del producto -->
-              <h6 class="card-title text-center text-primary fw-semibold mb-2"><%= producto.nombre %></h6>
 
-              <!-- Descripción del producto -->
-              <p class="card-text text-muted small text-center mb-3"><%= producto.descripcion %></p>
+              <!-- Nombre del producto (limitado a 1 línea) -->
+              <h6 class="card-title text-center text-primary fw-semibold mb-2 clamp-1">
+                <%= producto.nombre %>
+              </h6>
 
-              <!-- Precio y Stock -->
-              <div class="d-flex justify-content-between align-items-center mb-3">
-                <span class="text-success fw-bold">S/ <%= producto.precio %></span>
-                <span class="badge bg-secondary"><%= producto.stock %> en stock</span>
-              </div>
+              <!-- Descripción del producto (limitado a 2 líneas) -->
+              <p class="card-text text-muted small text-center mb-3 clamp-2">
+                <%= producto.descripcion %>
+              </p>
 
-              <!-- Botones -->
-              <div class="d-grid gap-2 mt-auto">
-                <a href="/edit/<%= producto.idproducto %>?origen=create" class="btn btn-sm btn-primary">Editar</a>
-                <a href="/delete/<%= producto.idproducto %>" class="btn btn-danger btn-sm delete" >Eliminar</a>
-              </div>
-            </div>
-          </div>
-        </div>
+              <!-- Contenedor inferior: Precio/Stock y Botones siempre abajo -->
+              <div class="mt-auto">
+
+                <!-- Precio (agrandado) y Stock -->
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                  <span class="text-success fw-bold fs-5">S/ <%= producto.precio %></span> <!-- Precio agrandado -->
+                  <span class="badge bg-secondary"><%= producto.stock %> en stock</span>
+                </div>
+
+                <!-- Botones -->
+                <div class="d-grid gap-2">
+                  <a href="/edit/<%= producto.idproducto %>?origen=create" class="btn btn-sm btn-primary">Editar</a>
+                  <a href="/delete/<%= producto.idproducto %>?origen=create" class="btn btn-danger btn-sm delete">Eliminar</a>
+                </div>
+
+              </div> <!-- Fin contenedor inferior -->
+
+            </div> <!-- Fin card-body -->
+
+          </div> <!-- Fin card -->
+        </div> <!-- Fin col -->
       <% }); %>
+
     <% } else { %>
       <div class="col">
         <div class="alert alert-info text-center">No hay productos disponibles en el catálogo.</div>
       </div>
     <% } %>
-  </div>
-</div>
+
+  </div> <!-- Fin row -->
+</div> <!-- Fin container -->
